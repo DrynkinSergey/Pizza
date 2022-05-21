@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 const Sort = () => {
+    const [visibleSort, setVisibleSort] = useState(false)
+
     return (
         <div className="sort">
             <div className="sort__label">
@@ -17,15 +19,15 @@ const Sort = () => {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span>популярности</span>
+                <span onClick={()=>setVisibleSort(!visibleSort)}>популярности</span>
             </div>
-            <div className="sort__popup">
+            {visibleSort?<div className="sort__popup" >
                 <ul>
                     <li className="active">популярности</li>
                     <li>цене</li>
                     <li>алфавиту</li>
                 </ul>
-            </div>
+            </div>:null}
         </div>
 
     );
