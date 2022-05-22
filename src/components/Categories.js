@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, {useState} from 'react';
 
 const Categories = () => {
     const [activeIndex, setActiveIndex] = useState(0)
