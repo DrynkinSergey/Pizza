@@ -1,11 +1,30 @@
 import React, {useState} from 'react';
 
-const Sort = () => {
+const Sort = ({value, onChangeSort}) => {
     const [visibleSort, setVisibleSort] = useState(false)
-    const [sortName, setSortName] = useState('популярности')
-    const SortNames = ['популярности', 'цене', 'алфавиту']
+    const list = [
+        {
+            name: 'популярности(DESC)', sortProperty: 'rating'
+        },
+        {
+            name: 'популярности(ASC)', sortProperty: '-rating'
+        },
+
+        {
+            name: 'цене(DESC)', sortProperty: 'price'
+        },
+        {
+            name: 'цене(ASC)', sortProperty: '-price'
+        },
+        {
+            name: 'алфавиту(DESC)', sortProperty: 'title'
+        },
+        {
+            name: 'алфавиту(ASC)', sortProperty: '-title'
+        },
+    ];
     const handleClick = (item) => {
-        setSortName(item);
+        onChangeSort(item);
         setVisibleSort(false)
     }
     return (
@@ -24,14 +43,14 @@ const Sort = () => {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span onClick={() => setVisibleSort(!visibleSort)}>{sortName}</span>
+                <span onClick={() => setVisibleSort(!visibleSort)}>{value.name}</span>
             </div>
             {visibleSort && (<div className="sort__popup">
                 <ul>
-                    {SortNames.map((item, i) => (<li key={i}
-                                                     className={sortName === item ? 'active' : ''}
+                    {list.map((item, i) => (<li key={i}
+                                                     className={value.name === item.name ? 'active' : ''}
                                                      onClick={() => handleClick(item)}>
-                            {item}</li>
+                            {item.name}</li>
                     ))}
                 </ul>
             </div>)}
