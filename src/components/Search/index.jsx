@@ -1,9 +1,11 @@
 import React from 'react';
 import styles from './search.module.scss'
-import {Context} from "../../App";
+import {useDispatch, useSelector} from "react-redux";
+import {onTyping} from "../../redux/slices/searchSlice";
 
 const Search = () => {
-    const {searchValue,setSearchValue} = React.useContext(Context)
+    const dispatch = useDispatch();
+    const searchString = useSelector(state=> state.search.searchString)
     return (
         <div className={styles.root}>
             <svg className={styles.icon}
@@ -13,9 +15,9 @@ const Search = () => {
                         strokeMiterlimit="10" strokeWidth="2"/>
                 <line fill="none" stroke="#000000" strokeMiterlimit="10" strokeWidth="4" x1="32.229" x2="45.5"
                       y1="32.229" y2="45.5"/></svg>
-            <input value={searchValue} onChange={(e)=>setSearchValue(e.target.value)} className={styles.input} placeholder='Поиск пиццы:'/>
-            {searchValue  && <svg
-                onClick={() => setSearchValue('')}
+            <input value={searchString} onChange={(e)=>dispatch(onTyping(e.target.value))} className={styles.input} placeholder='Поиск пиццы:'/>
+            {searchString  && <svg
+                onClick={() => searchString('')}
                 className={styles.iconClear} height="48" viewBox="0 0 48 48" width="48">
                 <path
                     d="M38 12.83L35.17 10 24 21.17 12.83 10 10 12.83 21.17 24 10 35.17 12.83 38 24 26.83 35.17 38 38 35.17 26.83 24z"/>

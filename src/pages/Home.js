@@ -5,26 +5,21 @@ import PizzaBlock from "../components/PizzaBlock";
 import Sort from "../components/Sort";
 import Skeleton from "../components/Skeleton";
 import Pagination from "../components/Pagination";
-import {Context} from "../App";
+import {useSelector} from "react-redux";
 
 const Home = () => {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true)
     const [currentPage,setCurrentPage] = useState(1)
-    const [categoryId, setCategoryId] = useState(0)
 
-    const [sortId, setSortId] = useState(
-        {
-            name: 'популярности', sortProperty: 'rating'
-        }
-    )
+    const searchString = useSelector((state) => state.search.searchString)
+    const selectCategory = useSelector((state) => state.category.index)
+    const selectedSort = useSelector((state) => state.sort.sortProperty)
 
-    const {searchValue} = React.useContext(Context)
-
-    const sortBy=sortId.sortProperty.replace('-','');
-    const order=sortId.sortProperty.includes('-')?`asc`:'desc';
-    const category = categoryId > 0 ? `category=${categoryId}&` : '';
-    const search = searchValue  ? `&search=${searchValue}` : '';
+    const sortBy=selectedSort.replace('-','');
+    const order=selectedSort.includes('-')?`asc`:'desc';
+    const category = selectCategory > 0 ? `category=${selectCategory}&` : '';
+    const search = searchString  ? `&search=${searchString}` : '';
 
     const baseUrl = 'https://628aaea77886bbbb37aaa711.mockapi.io/items?';
 
@@ -40,23 +35,24 @@ const Home = () => {
         )
         window.scrollTo(0, 0)
 
-    }, [categoryId,sortId,searchValue,currentPage])
-    const pizzas = items.filter(obj => obj.title.toLowerCase().includes(searchValue.toLowerCase())
+    }, [selectCategory,selectedSort,searchString,currentPage])
+    const pizzas = items.filter(obj => obj.title.toLowerCase().includes(searchString.toLowerCase())
     ).map(item => (
         <PizzaBlock key={item.id} {...item}/>
     ))
     return (
         <div className='container'>
             <div className="content__top">
-                <Categories value={categoryId} onChangeCategory={(id) => setCategoryId(id)}/>
-                <Sort value={sortId} onChangeSort={(prop)=>setSortId(prop)}/>
+
+                <Categories/>
+                <Sort/>
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
                 {
                     loading ? [...new Array(8)].map((item, index) => <Skeleton
                         key={index}/>) :
-                        searchValue? pizzas:
+                        searchString? pizzas:
                         items.map(item => (
                             <PizzaBlock key={item.id} {...item}/>
                         )
