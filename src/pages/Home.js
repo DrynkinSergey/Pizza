@@ -6,6 +6,7 @@ import Sort from "../components/Sort";
 import Skeleton from "../components/Skeleton";
 import Pagination from "../components/Pagination";
 import {useSelector} from "react-redux";
+import axios from "axios";
 
 const Home = () => {
     const [items, setItems] = useState([]);
@@ -25,17 +26,16 @@ const Home = () => {
 
 
     useEffect(() => {
-        fetch(`${baseUrl}page=${currentPage}&limit=8&${category}sortBy=${sortBy}&order=${order}${search}`).then(res => {
-            return res.json()
-        }).then(
-            (json) => {
-                setItems(json)
+        axios.get(`${baseUrl}page=${currentPage}&limit=8&${category}sortBy=${sortBy}&order=${order}${search}`).then(
+            (res) => {
+                setItems(res.data)
                 setLoading(false)
             }
         )
         window.scrollTo(0, 0)
-
     }, [selectCategory,selectedSort,searchString,currentPage])
+
+
     const pizzas = items.filter(obj => obj.title.toLowerCase().includes(searchString.toLowerCase())
     ).map(item => (
         <PizzaBlock key={item.id} {...item}/>

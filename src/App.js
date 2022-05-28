@@ -7,22 +7,18 @@ import Cart from "./pages/Cart";
 import NotFound from "./pages/NotFound";
 
 
-    export const Context = React.createContext()
-
 function App() {
 
     return (
         <div className="App">
-
             <div className="wrapper">
-                <Header />
+                <Header/>
                 <div className="content">
                     <Routes>
-                        <Route path='/' element={<Home />}/>
+                        <Route path='/' element={<Home/>}/>
                         <Route path='/cart' element={<Cart/>}/>
                         <Route path='*' element={<NotFound/>}/>
                     </Routes>
-
                 </div>
             </div>
 

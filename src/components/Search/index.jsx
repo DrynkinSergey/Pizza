@@ -15,7 +15,16 @@ const Search = () => {
                         strokeMiterlimit="10" strokeWidth="2"/>
                 <line fill="none" stroke="#000000" strokeMiterlimit="10" strokeWidth="4" x1="32.229" x2="45.5"
                       y1="32.229" y2="45.5"/></svg>
+           {/*
+           При вводе текста в input используется хук UseSelector для получения состояния из store
+           Value input'a завязано на состоянии и происходит flux груговорт
+           Диспатчим изменения input в store
+           */}
             <input value={searchString} onChange={(e)=>dispatch(onTyping(e.target.value))} className={styles.input} placeholder='Поиск пиццы:'/>
+
+            {/*
+            Используется условный рендер и отображение иконки
+            */}
             {searchString  && <svg
                 onClick={() => searchString('')}
                 className={styles.iconClear} height="48" viewBox="0 0 48 48" width="48">
