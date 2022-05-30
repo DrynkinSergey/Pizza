@@ -1,12 +1,12 @@
 import React from 'react';
 import styles from './notFoundBlock.module.scss'
-const NotFoundBlock = () => {
+const NotFoundBlock = ({title}) => {
     return (
 
         <h1 className={styles.content}>
             <icon>😕</icon>
             <br/>
-            Страница не найдена</h1>
+            {title}</h1>
 
     );
 };

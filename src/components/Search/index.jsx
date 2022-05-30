@@ -1,11 +1,24 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
+
+
 import styles from './search.module.scss'
 import {useDispatch, useSelector} from "react-redux";
 import {onTyping} from "../../redux/slices/searchSlice";
-
+import debounce from 'lodash.debounce';
 const Search = () => {
     const dispatch = useDispatch();
-    const searchString = useSelector(state=> state.search.searchString)
+    const searchString = useSelector(state=> state.search.searchString);
+
+    const [value, setValue] = useState('');
+    const updateSearchValue = useCallback(
+        debounce((str) => {
+            dispatch(onTyping(str))
+        },400), []
+    );
+    const onChangeInput = (event) => {
+        setValue(event.target.value);
+        updateSearchValue(event.target.value)
+    }
     return (
         <div className={styles.root}>
             <svg className={styles.icon}
@@ -20,13 +33,17 @@ const Search = () => {
            Value input'a завязано на состоянии и происходит flux груговорт
            Диспатчим изменения input в store
            */}
-            <input value={searchString} onChange={(e)=>dispatch(onTyping(e.target.value))} className={styles.input} placeholder='Поиск пиццы:'/>
+            <input value={value} onChange={(event)=> onChangeInput(event)} className={styles.input} placeholder='Поиск пиццы:'/>
 
             {/*
             Используется условный рендер и отображение иконки
             */}
             {searchString  && <svg
-                onClick={() => searchString('')}
+                onClick={() =>{
+                    setValue('')
+                    updateSearchValue('')
+
+                }}
                 className={styles.iconClear} height="48" viewBox="0 0 48 48" width="48">
                 <path
                     d="M38 12.83L35.17 10 24 21.17 12.83 10 10 12.83 21.17 24 10 35.17 12.83 38 24 26.83 35.17 38 38 35.17 26.83 24z"/>
