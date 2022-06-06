@@ -15,9 +15,14 @@ export const categorySlice = createSlice({
         onPageChange: (state, action) => {
             state.currentPage = action.payload
         },
+        setFilters(state, action){
+            state.currentPage = action.payload.currentPage;
+            state.sort = Number(action.payload.sort);
+            state.categoryId = Number(action.payload.categoryId);
+        }
     },
 })
 
-export const { changeCategory,onPageChange } = categorySlice.actions
+export const { changeCategory,onPageChange,setFilters } = categorySlice.actions
 
 export default categorySlice.reducer

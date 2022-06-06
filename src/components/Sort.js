@@ -1,35 +1,35 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {changeSortName, changeSortProp} from "../redux/slices/sortSlice";
+import { setSort} from "../redux/slices/sortSlice";
+export const list = [
+    {
+        name: 'популярности', sortProperty: 'rating'
+    },
+    {
+        name: 'популярности(ASC)', sortProperty: '-rating'
+    },
 
+    {
+        name: 'цене(DESC)', sortProperty: 'price'
+    },
+    {
+        name: 'цене(ASC)', sortProperty: '-price'
+    },
+    {
+        name: 'алфавиту(DESC)', sortProperty: 'title'
+    },
+    {
+        name: 'алфавиту(ASC)', sortProperty: '-title'
+    },
+];
 const Sort = () => {
     const [visibleSort, setVisibleSort] = useState(false)
     const dispatch = useDispatch();
-    const selectedSortProp = useSelector(state => state.sort.sortName)
-    const list = [
-        {
-            name: 'популярности', sortProperty: 'rating'
-        },
-        {
-            name: 'популярности(ASC)', sortProperty: '-rating'
-        },
-
-        {
-            name: 'цене(DESC)', sortProperty: 'price'
-        },
-        {
-            name: 'цене(ASC)', sortProperty: '-price'
-        },
-        {
-            name: 'алфавиту(DESC)', sortProperty: 'title'
-        },
-        {
-            name: 'алфавиту(ASC)', sortProperty: '-title'
-        },
-    ];
+    const selectedSortProp = useSelector(state => state.sort.sort)
     const handleClick = (item) => {
-        dispatch(changeSortProp(item.sortProperty));
-        dispatch(changeSortName(item.name));
+        console.log(item);
+        dispatch(setSort(item));
+
         setVisibleSort(false)
     }
     return (
@@ -48,7 +48,7 @@ const Sort = () => {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span onClick={() => setVisibleSort(!visibleSort)}>{selectedSortProp}</span>
+                <span onClick={() => setVisibleSort(!visibleSort)}>{selectedSortProp.name}</span>
             </div>
             {visibleSort && (<div className="sort__popup">
                 <ul>

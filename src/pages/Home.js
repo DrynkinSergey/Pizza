@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 
 import Categories from "../components/Categories";
@@ -6,29 +6,40 @@ import PizzaBlock from "../components/PizzaBlock";
 import Sort from "../components/Sort";
 import Skeleton from "../components/Skeleton";
 import Pagination from "../components/Pagination";
+
 import {useDispatch, useSelector} from "react-redux";
+import {useNavigate}  from 'react-router-dom';
+import qs from 'qs'
+
 import axios from "axios";
-import {onPageChange} from "../redux/slices/filterSlice";
+import {list} from '../components/Sort'
+import {setCurrentPage, setFilters} from "../redux/slices/sortSlice";
 
 const Home = () => {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
-    const dispatch = useDispatch()
+    const searching = useRef(false);
+    const isMount = useRef(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     /*Selectors*/
-    const currentPage = useSelector((state) => state.category.currentPage)
-    const searchString = useSelector((state) => state.search.searchString)
-    const selectCategory = useSelector((state) => state.category.index)
-    const selectedSort = useSelector((state) => state.sort.sortProperty)
+    const sort = useSelector((state) => state.sort);
 
-    const sortBy = selectedSort.replace('-', '');
-    const order = selectedSort.includes('-') ? `asc` : 'desc';
-    const category = selectCategory > 0 ? `category=${selectCategory}&` : '';
-    const search = searchString ? `&search=${searchString}` : '';
-
-    const baseUrl = 'https://628aaea77886bbbb37aaa711.mockapi.io/items?';
+    const currentPage = useSelector((state) => state.sort.currentPage);
+    const searchString = useSelector((state) => state.search.searchString);
+    const selectCategory = useSelector((state) => state.sort.categoryId);
+    const selectedSort = useSelector((state) => state.sort.sort.sortProperty);
 
 
-    useEffect(() => {
+
+    const fetchPizzas = () => {
+        const baseUrl = 'https://628aaea77886bbbb37aaa711.mockapi.io/items?';
+
+        const sortBy = selectedSort.replace('-', '');
+        const order = selectedSort.includes('-') ? `asc` : 'desc';
+        const category = selectCategory > 0 ? `category=${selectCategory}&` : '';
+        const search = searchString ? `&search=${searchString}` : '';
+        setLoading(true)
         axios.get(`${baseUrl}page=${currentPage}&limit=8&${category}sortBy=${sortBy}&order=${order}${search}`).then(
             (res) => {
                 setItems(res.data)
@@ -36,10 +47,41 @@ const Home = () => {
             }
         )
         window.scrollTo(0, 0)
+    }
+
+    useEffect(()=> {
+        if (window.location.search) {
+            const params = qs.parse(window.location.search.substring(1));
+            const sort = list.find((obj) => obj.sortProperty === params.sortProperty)
+            dispatch(
+                setFilters({
+                    ...params,
+                    sort,
+                })
+            )
+            searching.current= true;
+        }
+    },[])
+
+    useEffect(() => {
+        searching.current? searching.current = false :     fetchPizzas();
     }, [selectCategory, selectedSort, searchString, currentPage])
 
+    useEffect(() => {
+            if(isMount.current){
+                const queryString = qs.stringify({
+                    sortProperty : selectedSort,
+                    categoryId: selectCategory,
+                    currentPage,
+                })
+                navigate(`?${queryString}`)
+            }
+            isMount.current = true
+    }, [selectCategory, selectedSort, searchString, currentPage]);
+
+
     const onPageClick = number => {
-        dispatch(onPageChange(number))
+        dispatch(setCurrentPage(number))
     }
     const pizzas = items.filter(obj => obj.title.toLowerCase().includes(searchString.toLowerCase())
     ).map(item => (
