@@ -87,6 +87,7 @@ const Home = () => {
     ).map(item => (
         <PizzaBlock key={item.id} {...item}/>
     ));
+
     return (
         <div className='container'>
             <div className="content__top">
