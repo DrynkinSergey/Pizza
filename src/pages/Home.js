@@ -13,7 +13,7 @@ import qs from 'qs'
 
 import axios from "axios";
 import {list} from '../components/Sort'
-import {setCurrentPage, setFilters} from "../redux/slices/sortSlice";
+import {setCurrentPage, setFilters} from "../redux/slices/filterSlice";
 
 const Home = () => {
     const [items, setItems] = useState([]);
@@ -23,10 +23,9 @@ const Home = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     /*Selectors*/
-    const sort = useSelector((state) => state.sort);
 
     const currentPage = useSelector((state) => state.sort.currentPage);
-    const searchString = useSelector((state) => state.search.searchString);
+    const searchString = useSelector((state) => state.sort.searchValue);
     const selectCategory = useSelector((state) => state.sort.categoryId);
     const selectedSort = useSelector((state) => state.sort.sort.sortProperty);
 
@@ -50,6 +49,7 @@ const Home = () => {
     }
 
     useEffect(()=> {
+        fetchPizzas();
         if (window.location.search) {
             const params = qs.parse(window.location.search.substring(1));
             const sort = list.find((obj) => obj.sortProperty === params.sortProperty)
@@ -91,7 +91,6 @@ const Home = () => {
     return (
         <div className='container'>
             <div className="content__top">
-
                 <Categories/>
                 <Sort/>
             </div>

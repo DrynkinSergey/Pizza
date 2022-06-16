@@ -3,16 +3,15 @@ import React, {useCallback, useState} from 'react';
 
 import styles from './search.module.scss'
 import {useDispatch, useSelector} from "react-redux";
-import {onTyping} from "../../redux/slices/searchSlice";
 import debounce from 'lodash.debounce';
+import {setSearchQuery} from "../../redux/slices/filterSlice";
 const Search = () => {
     const dispatch = useDispatch();
-    const searchString = useSelector(state=> state.search.searchString);
-
+    const searchValue = useSelector(state=> state.sort.searchValue);
     const [value, setValue] = useState('');
     const updateSearchValue = useCallback(
         debounce((str) => {
-            dispatch(onTyping(str))
+            dispatch(setSearchQuery(str))
         },400), []
     );
     const onChangeInput = (event) => {
@@ -38,7 +37,7 @@ const Search = () => {
             {/*
             Используется условный рендер и отображение иконки
             */}
-            {searchString  && <svg
+            {searchValue  && <svg
                 onClick={() =>{
                     setValue('')
                     updateSearchValue('')

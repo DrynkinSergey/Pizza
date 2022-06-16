@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {setCategoryId} from "../redux/slices/sortSlice";
+import {setCategoryId} from "../redux/slices/filterSlice";
 
 const Categories = () => {
     const dispatch = useDispatch()
