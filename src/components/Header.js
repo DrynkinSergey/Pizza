@@ -5,7 +5,8 @@ import Search from "./Search";
 import {useSelector} from "react-redux";
 
 const Header = () => {
-    const {totalPrice,size} = useSelector(state => state.cart)
+    const {totalPrice, items} = useSelector(state => state.cart)
+    const totalCount = items.reduce((sum, item)=> sum + item.count, 0)
 
     return (
         <div className="header">
@@ -45,7 +46,7 @@ const Header = () => {
 
                             />
                         </svg>
-                        <span>{size}</span>
+                        <span>{totalCount}</span>
                     </Link>
                 </div>
             </div>

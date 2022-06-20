@@ -5,6 +5,7 @@ import {addItem} from "../redux/slices/cartSlice";
 const PizzaBlock = ({title, price, imageUrl, sizes, types, id}) => {
     const dispatch = useDispatch();
     const cartItem = useSelector(state => state.cart.items.find(obj => obj.id === id))
+
     const addedCount = cartItem? cartItem.count : 0;
     const [pizzaType, setPizzaType] = useState(types[0]);
     const [pizzaSize, setPizzaSize] = useState(sizes[0])
@@ -15,12 +16,11 @@ const PizzaBlock = ({title, price, imageUrl, sizes, types, id}) => {
             title,
             price,
             imageUrl,
-            type: pizzaType,
+            type: pizzaType === 0? PizzaType[0] : PizzaType[1],
             size: pizzaSize
         };
         dispatch(addItem(item))
     }
-
     return (
         <div className='pizza-block-wrapper'>
             <div className="pizza-block">
