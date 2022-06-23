@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import CartItem from "../components/CartItem";
 import {clearCart} from "../redux/slices/cartSlice";
+import CartEmpty from "../components/CartEmpty";
 
 const Cart = () => {
     const dispatch = useDispatch();
@@ -13,7 +14,10 @@ const Cart = () => {
             dispatch(clearCart())
         }
     }
-    return (
+    if(!items.length){
+        return <CartEmpty/>
+    }
+     return (
         <div className='container'>
 
             <div className="content">
@@ -87,6 +91,7 @@ const Cart = () => {
                 </div>
             </div>
         </div>
+
     );
 };
 
