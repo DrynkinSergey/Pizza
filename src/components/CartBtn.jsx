@@ -6,7 +6,7 @@ const CartBtn = () => {
     const totalCount = items.reduce((sum, item)=> sum + item.count, 0)
     return (
         <div className="header__cart">
-            <Link to="/cart" className="button button--cart">
+            <Link to="/Pizza/cart" className="button button--cart">
                 {totalPrice?<span>{totalPrice}₽</span>:null}
                 {totalPrice?<div className="button__delimiter"/>:null}
                 <svg

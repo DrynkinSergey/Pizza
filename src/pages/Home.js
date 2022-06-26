@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 
 
 import Categories from "../components/Categories";
@@ -8,16 +8,15 @@ import Skeleton from "../components/Skeleton";
 import Pagination from "../components/Pagination";
 
 import {useDispatch, useSelector} from "react-redux";
-import {useNavigate}  from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import qs from 'qs'
 
-import axios from "axios";
+
 import {list} from '../components/Sort'
 import {setCurrentPage, setFilters} from "../redux/slices/filterSlice";
+import {fetchPizzas} from "../redux/slices/pizzaSlice";
 
 const Home = () => {
-    const [items, setItems] = useState([]);
-    const [loading, setLoading] = useState(true);
     const searching = useRef(false);
     const isMount = useRef(false);
     const dispatch = useDispatch();
@@ -28,29 +27,32 @@ const Home = () => {
     const searchString = useSelector((state) => state.sort.searchValue);
     const selectCategory = useSelector((state) => state.sort.categoryId);
     const selectedSort = useSelector((state) => state.sort.sort.sortProperty);
+    const {items, status} = useSelector(state => state.pizza);
 
 
-
-    const fetchPizzas = () => {
+    const getPizza = async () => {
         const baseUrl = 'https://628aaea77886bbbb37aaa711.mockapi.io/items?';
-
         const sortBy = selectedSort.replace('-', '');
         const order = selectedSort.includes('-') ? `asc` : 'desc';
         const category = selectCategory > 0 ? `category=${selectCategory}&` : '';
         const search = searchString ? `&search=${searchString}` : '';
-        setLoading(true)
-        axios.get(`${baseUrl}page=${currentPage}&limit=8&${category}sortBy=${sortBy}&order=${order}${search}`).then(
-            (res) => {
-                setItems(res.data)
-                setLoading(false)
-            }
-        )
+
+            dispatch(fetchPizzas({
+                baseUrl,
+                sortBy,
+                order,
+                category,
+                search,
+                currentPage
+            }))
+
         window.scrollTo(0, 0)
     }
 
-    useEffect(()=> {
-        fetchPizzas();
+    useEffect(() => {
+        getPizza();
         if (window.location.search) {
+
             const params = qs.parse(window.location.search.substring(1));
             const sort = list.find((obj) => obj.sortProperty === params.sortProperty)
             dispatch(
@@ -59,24 +61,24 @@ const Home = () => {
                     sort,
                 })
             )
-            searching.current= true;
+            searching.current = true;
         }
-    },[])
+    }, [])
 
     useEffect(() => {
-        searching.current? searching.current = false :     fetchPizzas();
+        searching.current ? searching.current = false : getPizza();
     }, [selectCategory, selectedSort, searchString, currentPage])
 
     useEffect(() => {
-            if(isMount.current){
-                const queryString = qs.stringify({
-                    sortProperty : selectedSort,
-                    categoryId: selectCategory,
-                    currentPage,
-                })
-                navigate(`?${queryString}`)
-            }
-            isMount.current = true
+        if (isMount.current) {
+            const queryString = qs.stringify({
+                sortProperty: selectedSort,
+                categoryId: selectCategory,
+                currentPage,
+            })
+            navigate(`?${queryString}`)
+        }
+        isMount.current = true
     }, [selectCategory, selectedSort, searchString, currentPage]);
 
 
@@ -97,9 +99,9 @@ const Home = () => {
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
                 {
-                    loading ? [...new Array(8)].map((item, index) => <Skeleton
+                    status === 'loading' ? [...new Array(8)].map((item, index) => <Skeleton
                             key={index}/>) :
-                        searchString? pizzas:
+                        searchString ? pizzas :
                             items.map(item => (
                                     <PizzaBlock key={item.id} {...item}/>
                                 )
