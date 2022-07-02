@@ -3,16 +3,16 @@ import ContentLoader from "react-content-loader"
 
 const MyLoader = (props) => (
     <ContentLoader
-        className='pizza-block'
+        className='skeleton'
         speed={2}
         width={280}
         height={465}
-        viewBox="0 0 280 465"
+        viewBox="0 -20 280 465"
         backgroundColor="#f3f3f3"
         foregroundColor="#cfcfcf"
         {...props}
     >
-        <circle cx="133" cy="154" r="115" />
+        <circle cx="133" cy="154" r="125" />
         <circle cx="117" cy="173" r="12" />
         <rect x="30" y="289" rx="0" ry="0" width="210" height="19" />
         <rect x="31" y="333" rx="0" ry="0" width="210" height="53" />

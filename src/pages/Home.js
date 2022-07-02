@@ -31,14 +31,12 @@ const Home = () => {
 
 
     const getPizza = async () => {
-        const baseUrl = 'https://628aaea77886bbbb37aaa711.mockapi.io/items?';
         const sortBy = selectedSort.replace('-', '');
         const order = selectedSort.includes('-') ? `asc` : 'desc';
         const category = selectCategory > 0 ? `category=${selectCategory}&` : '';
         const search = searchString ? `&search=${searchString}` : '';
 
             dispatch(fetchPizzas({
-                baseUrl,
                 sortBy,
                 order,
                 category,
@@ -102,9 +100,9 @@ const Home = () => {
                     status === 'loading' ? [...new Array(8)].map((item, index) => <Skeleton
                             key={index}/>) :
                         searchString ? pizzas :
-                            items.map(item => (
+                            items.map(item =>
                                     <PizzaBlock key={item.id} {...item}/>
-                                )
+
                             )
                 }
             </div>

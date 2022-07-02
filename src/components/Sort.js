@@ -64,7 +64,7 @@ const Sort = () => {
             {visibleSort && (<div className="sort__popup">
                 <ul>
                     {list.map((item, i) => (<li key={i}
-                                                className={selectedSortProp === item.name ? 'active' : ''}
+                                                className={selectedSortProp.name === item.name ? 'active' : ''}
                                                 onClick={() => handleClick(item)}>
                             {item.name}</li>
                     ))}
