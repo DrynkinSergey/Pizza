@@ -3,7 +3,11 @@ import axios from "axios";
 import {Link, useParams} from "react-router-dom";
 
 const SinglePizza:React.FC = () => {
-    const [pizza, setPizza] = useState()
+    const [pizza, setPizza] = useState<{
+        imageUrl:string,
+        title:string,
+        price:number
+    }>()
    const {id} =useParams();
     useEffect(() => {
         const fetchPizza = async () => {
@@ -12,9 +16,11 @@ const SinglePizza:React.FC = () => {
         }
         fetchPizza();
     }, []);
+
     if(!pizza){
         return <h1>Loading</h1>
     }
+
     return (
         <div className='container'>
             <div style={{
