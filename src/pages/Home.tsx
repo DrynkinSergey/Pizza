@@ -13,7 +13,7 @@ import qs from 'qs'
 
 
 import {list} from '../components/Sort'
-import {setCurrentPage, setFilters} from "../redux/slices/filterSlice";
+import {setCategoryId, setCurrentPage, setFilters} from "../redux/slices/filterSlice";
 import {fetchPizzas} from "../redux/slices/pizzaSlice";
 
 const Home:React.FC = () => {
@@ -31,11 +31,13 @@ const Home:React.FC = () => {
 
     const selectCategory = useSelector((state) => state.sort.categoryId);
     //@ts-ignore
+    const categoryId = useSelector((state) => state.sort.categoryId)
+    //@ts-ignore
 
     const selectedSort = useSelector((state) => state.sort.sort.sortProperty);
     //@ts-ignore
 
-    const {items, status} = useSelector(state => state.pizza);
+    const {items, status} = useSelector((state) => state.pizza);
 
 
     const getPizza = async () => {
@@ -97,11 +99,14 @@ const Home:React.FC = () => {
     ).map((item:any) => (
         <PizzaBlock key={item.id} {...item}/>
     ));
+    const onChangeCategory = (index:number) => {
+        dispatch(setCategoryId(index))
+    }
 
     return (
         <div className='container'>
             <div className="content__top">
-                <Categories/>
+                <Categories categoryId={categoryId} onChangeCategory = {onChangeCategory}/>
                 <Sort/>
             </div>
             <h2 className="content__title">Все пиццы</h2>

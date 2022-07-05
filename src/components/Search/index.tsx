@@ -17,7 +17,7 @@ const Search:React.FC = () => {
             dispatch(setSearchQuery(str))
         },400), []
     );
-    const onChangeInput = (event:any) => {
+    const onChangeInput = (event:React.ChangeEvent<HTMLInputElement>) => {
         setValue(event.target.value);
         updateSearchValue(event.target.value)
     }

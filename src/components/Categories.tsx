@@ -1,16 +1,15 @@
 import React from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {setCategoryId, setCurrentPage} from "../redux/slices/filterSlice";
+import { useSelector} from "react-redux";
 
-const Categories:React.FC = () => {
-    const dispatch = useDispatch()    //@ts-ignore
+type CategoriesProps = {
+    onChangeCategory: (id:number)=> void;
+    categoryId:number;
+}
 
-    const categoryId = useSelector((state) => state.sort.categoryId)
-    const handleClick = (id:number) => {
-       dispatch(setCategoryId(id))
-        dispatch(setCurrentPage(1))
+const Categories:React.FC<CategoriesProps> = ({onChangeCategory,categoryId}) => {
+     //@ts-ignore
 
-    }
+
     const categories = [
         {
             id: 0,
@@ -42,7 +41,7 @@ const Categories:React.FC = () => {
             <ul>
                 {categories.map(item => {
                     return <li key={item.id}
-                               onClick={()=>handleClick(item.id)}
+                               onClick={()=>onChangeCategory(item.id)}
                                className={categoryId === item.id ? 'active' : ''}
                     >{item.title}</li>
                 })}

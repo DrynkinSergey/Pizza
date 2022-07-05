@@ -4,8 +4,8 @@ import ReactPaginate from "react-paginate";
 import {useSelector} from "react-redux";
 
 type PaginationProps = {
-    onChangePage:any,
-    currentPage:any
+    onChangePage:(i:number)=>void,
+    currentPage:number;
 }
 
 const Pagination:React.FC<PaginationProps> = ({onChangePage,currentPage}) => {    //@ts-ignore
