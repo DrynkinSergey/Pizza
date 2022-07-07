@@ -12,11 +12,11 @@ type CartItemProps = {
     size:number
 }
 
-const CartItem:React.FC<CartItemProps> = ({id, title, type, price, count, imageUrl, size}) => {
+const CartItemBlock:React.FC<CartItemProps> = ({id, title, type, price, count, imageUrl, size}) => {
     const dispatch = useDispatch();
     const onClickPlus = () => {
 
-        dispatch(addItem({id}))
+        dispatch(addItem({id} as CartItemProps))
     }
     const onClickMinus = () => {
         count === 1 ? dispatch(removeItem(id)) : dispatch(minusItem(id));
@@ -85,4 +85,4 @@ const CartItem:React.FC<CartItemProps> = ({id, title, type, price, count, imageU
     );
 };
 
-export default CartItem;
+export default CartItemBlock;
