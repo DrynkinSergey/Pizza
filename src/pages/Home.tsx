@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 
 
 import Categories from "../components/Categories";
@@ -12,9 +12,8 @@ import {useNavigate} from 'react-router-dom';
 import qs from 'qs'
 
 
-import {list} from '../components/Sort'
-import { setCategoryId, setCurrentPage, setFilters} from "../redux/slices/filterSlice";
-import {fetchPizzas, SearchPizzasParams} from "../redux/slices/pizzaSlice";
+import { setCategoryId, setCurrentPage} from "../redux/slices/filterSlice";
+import {fetchPizzas} from "../redux/slices/pizzaSlice";
 import {RootState, useAppDispatch} from "../redux/store";
 
 const Home: React.FC = () => {
@@ -47,6 +46,7 @@ const Home: React.FC = () => {
 
         window.scrollTo(0, 0)
     }
+/*
 
     useEffect(() => {
         dispatch(fetchPizzas({} as SearchPizzasParams));
@@ -65,6 +65,7 @@ const Home: React.FC = () => {
         searching.current = true;
 
     }, [])
+*/
 
     useEffect(() => {
         searching.current ? searching.current = false : getPizza();
@@ -90,9 +91,13 @@ const Home: React.FC = () => {
     ).map((item: any) => (
         <PizzaBlock key={item.id} {...item}/>
     ));
-    const onChangeCategory = (index: number) => {
-        dispatch(setCategoryId(index))
-    }
+    const onChangeCategory = useCallback(
+        (index: number) => {
+            dispatch(setCategoryId(index))
+        },
+        [],
+    );
+
 
     return (
         <div className='container'>

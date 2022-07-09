@@ -1,15 +1,26 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Link} from "react-router-dom";
 import {useSelector} from "react-redux";
+import {RootState} from "../redux/store";
 const CartBtn:React.FC = () => {    //@ts-ignore
-
-    const {totalPrice, items} = useSelector(state => state.cart)
+    const isMounted = useRef(false);
+    const {totalPrice, items} = useSelector((state:RootState) => state.cart)
     const totalCount = items.reduce((sum:number, item:{count:number})=> sum + item.count, 0)
+    useEffect(()=>{
+        if(isMounted.current){
+            const json = JSON.stringify(items);
+            const price = JSON.stringify(totalPrice);
+            localStorage.setItem('totalPrice',price);
+            localStorage.setItem('cart',json);
+        }
+        isMounted.current = true;
+
+    },[items])
     return (
         <div className="header__cart">
             <Link to="/Pizza/cart" className="button button--cart">
-                {totalPrice?<span>{totalPrice}₽</span>:null}
-                {totalPrice?<div className="button__delimiter"/>:null}
+                <span>{totalPrice}₽</span>
+             <div className="button__delimiter"/>
                 <svg
                     width="38"
                     height="18"

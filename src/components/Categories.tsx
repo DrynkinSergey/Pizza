@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import { useSelector} from "react-redux";
 
 type CategoriesProps = {
@@ -6,10 +6,8 @@ type CategoriesProps = {
     categoryId:number;
 }
 
-const Categories:React.FC<CategoriesProps> = ({onChangeCategory,categoryId}) => {
-     //@ts-ignore
-
-
+const Categories:React.FC<CategoriesProps> = memo(({onChangeCategory,categoryId}) => {
+    console.log('render')
     const categories = [
         {
             id: 0,
@@ -49,6 +47,7 @@ const Categories:React.FC<CategoriesProps> = ({onChangeCategory,categoryId}) => 
         </div>
 
     );
-};
+}
+)
 
 export default Categories;
